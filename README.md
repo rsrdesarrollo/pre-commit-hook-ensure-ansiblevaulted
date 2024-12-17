@@ -24,9 +24,9 @@ Unconditional⋆ [`pre-commit`](https://pre-commit.com) hook to encrypt sensitiv
 2. Define settings in `.ensure-ansiblevaulted.yml`:
 
 ``` yaml
-# Optional. Default: vault-encrypted
-# The suffix to be added to an encrypted file created with `ansible-vault`
-encrypted-suffix: vault
+# Optional. Default: enc.yaml
+# The extension to be added to an encrypted file created with `enc.yaml`
+encrypted-extension: vault
 
 # Optional. Default: .with-error
 # Should files to encrypted listed in `files` (see below) be checked against `.gitignore`:
@@ -44,11 +44,11 @@ files:
   - "*.*another-ext"
 ```
 
-Once the hook activated, all files across the repo matching either against `*.ext` or `*.*another-ext` to be encrypted using `ansible-vault` to ones `*.ext.vault` or `*.*another-ext.vault` and staged for a commit.
+Once the hook activated, all files across the repo matching either against `*.ext` or `*.*another-ext` to be encrypted using `ansible-vault` to ones `*.vault` and staged for a commit.
 
 The files before being encrypted, firstly checked for a difference against an encrypted copy. Once they differ, they are re-encrypted using `ansible-vault edit`, otherwise skipped.
 
-3. **Highly recommended**: add the patterns from the previous step to `.gitignore` to avoid any accidental commit to git. Files with `encrypted-suffix` are subject for adding to git only.
+3. **Highly recommended**: add the patterns from the previous step to `.gitignore` to avoid any accidental commit to git. Files with `encrypted-extension` are subject for adding to git only.
 
 ## Rationale
 

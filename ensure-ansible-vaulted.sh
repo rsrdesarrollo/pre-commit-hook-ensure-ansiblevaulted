@@ -38,8 +38,8 @@ if [ ! -f "${SELF_CFG}" ]; then
   exit 1
 fi
 
-if ! OPT_ENCRYPTED_SUFFIX=$(yq '.encrypted-suffix // "vault-encrypted"' "${SELF_CFG}"); then
-  echo "- ${_ERR}: config error while reading encrypted suffix"
+if ! OPT_ENCRYPTED_EXT=$(yq '.encrypted-extension // "enc.yaml"' "${SELF_CFG}"); then
+  echo "- ${_ERR}: config error while reading encrypted extension"
   exit 1
 fi
 
@@ -59,7 +59,7 @@ export EDITOR="${SELF_EDITOR}"
 
 while read -r PLAIN_ENTRY; do
   while read -r PLAIN_FULL_PATH; do
-    ENCRYPTED_FULL_PATH="${PLAIN_FULL_PATH}.${OPT_ENCRYPTED_SUFFIX}"
+    ENCRYPTED_FULL_PATH="${PLAIN_FULL_PATH%.*}.${OPT_ENCRYPTED_EXT}"
 
     echo "- ${_INF} ensure ansible vaulted: ${PLAIN_FULL_PATH} -> ${ENCRYPTED_FULL_PATH}"
 
@@ -79,7 +79,7 @@ while read -r PLAIN_ENTRY; do
     if [ ! -f "${ENCRYPTED_FULL_PATH}" ]; then
       echo "  + ${ENCRYPTED_FULL_PATH} not found, creating for you..."
       # shellcheck disable=SC2086
-      if ! ansible-vault create ${ANSIBLE_VAULT_PASSWORD_ARG} "${ENCRYPTED_FULL_PATH}" <"${PLAIN_FULL_PATH}"; then
+      if ! ansible-vault create --skip-tty-check ${ANSIBLE_VAULT_PASSWORD_ARG} "${ENCRYPTED_FULL_PATH}" <"${PLAIN_FULL_PATH}"; then
         echo "  + ${_ERR}: failed"
         exit 1
       fi
