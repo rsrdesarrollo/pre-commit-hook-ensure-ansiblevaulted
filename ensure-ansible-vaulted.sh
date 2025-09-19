@@ -38,18 +38,18 @@ if [ ! -f "${SELF_CFG}" ]; then
   exit 1
 fi
 
-if ! OPT_ENCRYPTED_EXT=$(yq '.encrypted-extension // "enc.yaml"' "${SELF_CFG}"); then
+if ! OPT_ENCRYPTED_EXT=$(yq '.["encrypted-extension"] // "enc.yaml"' "${SELF_CFG}"); then
   echo "- ${_ERR}: config error while reading encrypted extension"
   exit 1
 fi
 
-OPT_VAULT_PASSWORD_FILE=$(yq '.vault-password-file // ""' "${SELF_CFG}")
+OPT_VAULT_PASSWORD_FILE=$(yq '.["vault-password-file"] // ""' "${SELF_CFG}")
 ANSIBLE_VAULT_PASSWORD_ARG=""
 if [ -n "${OPT_VAULT_PASSWORD_FILE}" ]; then
   ANSIBLE_VAULT_PASSWORD_ARG="--vault-password-file ${OPT_VAULT_PASSWORD_FILE}"
 fi
 
-OPT_ENSURE_IGNORED=$(yq '.track-git-ignored // ".with-error"' "${SELF_CFG}")
+OPT_ENSURE_IGNORED=$(yq '.["track-git-ignored"] // ".with-error"' "${SELF_CFG}")
 if [ ! ".with-error" = "${OPT_ENSURE_IGNORED}" ] && [ ! ".with-warning" = "${OPT_ENSURE_IGNORED}" ]; then
   echo " - ${_ERR}: unknown value for track-ignored=${OPT_ENSURE_IGNORED}"
   exit 1
