@@ -68,6 +68,13 @@ while read -r PLAIN_ENTRY; do
       exit 1
     fi
 
+    if [[ "${PLAIN_FULL_PATH}" == *.${OPT_ENCRYPTED_EXT} ]]; then
+      if ! head -n 1 "${PLAIN_FULL_PATH}" | grep -q '^\$ANSIBLE_VAULT;'; then
+        echo "  + ${_ERR}: ${PLAIN_FULL_PATH} should be encrypted with ansible-vault"
+        exit 1
+      fi
+    fi
+
     if ! git check-ignore -q "${PLAIN_FULL_PATH}"; then
       echo "  + ${PLAIN_FULL_PATH} is not declared in .gitignore"
       if [ ".with-error" = "${OPT_ENSURE_IGNORED}" ]; then
