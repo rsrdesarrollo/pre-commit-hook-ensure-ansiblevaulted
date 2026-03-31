@@ -74,6 +74,7 @@ while read -r PLAIN_ENTRY; do
         exit 1
       else
         echo "  + ${_INF} ${OPT_ENCRYPTED_EXT} file properly encrypted, skipping."
+        continue
       fi
     fi
 
