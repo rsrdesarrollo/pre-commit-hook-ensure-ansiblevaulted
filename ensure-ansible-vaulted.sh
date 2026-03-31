@@ -61,7 +61,11 @@ while read -r PLAIN_ENTRY; do
   while read -r PLAIN_FULL_PATH; do
     ENCRYPTED_FULL_PATH="${PLAIN_FULL_PATH%.*}.${OPT_ENCRYPTED_EXT}"
 
-    echo "- ${_INF} ensure ansible vaulted: ${PLAIN_FULL_PATH} -> ${ENCRYPTED_FULL_PATH}"
+    if [[ "${PLAIN_FULL_PATH}" == *.${OPT_ENCRYPTED_EXT} ]]; then
+      echo "- ${_INF} ensure ansible vaulted: ${PLAIN_FULL_PATH}"
+    else
+      echo "- ${_INF} ensure ansible vaulted: ${PLAIN_FULL_PATH} -> ${ENCRYPTED_FULL_PATH}"
+    fi
 
     if [ ! -f "${PLAIN_FULL_PATH}" ]; then
       echo "  + ${_ERR}: ${PLAIN_FULL_PATH} not found/accessible"
