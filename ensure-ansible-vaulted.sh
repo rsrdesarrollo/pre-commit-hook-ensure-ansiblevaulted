@@ -72,6 +72,8 @@ while read -r PLAIN_ENTRY; do
       if ! head -n 1 "${PLAIN_FULL_PATH}" | grep -q '^\$ANSIBLE_VAULT;'; then
         echo "  + ${_ERR}: ${PLAIN_FULL_PATH} should be encrypted with ansible-vault"
         exit 1
+      else
+        echo "  + ${_INF} ${OPT_ENCRYPTED_EXT} file properly encrypted, skipping."
       fi
     fi
 
